@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, TrendingUp, Shield, Percent, Tag, Lightbulb, BarChart3, Layers, History, TriangleAlert, Search, Coins } from 'lucide-react';
+import CandlestickChart from '@/components/candlestick-chart';
 import type { CryptoAnalysisResponse, CryptoAnalysisRequest } from '@/types/crypto';
 
 export default function CryptoDashboard() {
@@ -201,6 +202,16 @@ export default function CryptoDashboard() {
         {/* Results Section */}
         {results && (
           <div className="animate-fade-in">
+            {/* Candlestick Chart */}
+            {results.analysis.candles && results.analysis.candles.length > 0 && (
+              <div className="mb-8">
+                <CandlestickChart 
+                  data={results.analysis.candles} 
+                  pair={results.pair}
+                />
+              </div>
+            )}
+
             {/* Trading Recipe Highlight */}
             <div className="mb-8">
               <h2 className="text-2xl font-bold text-slate-100 mb-6 flex items-center">

@@ -1,5 +1,15 @@
+export interface CandleData {
+  close: number;
+  high: number;
+  low: number;
+  open: number;
+  time: number;
+  volume: number;
+}
+
 export interface CryptoAnalysisResponse {
   analysis: {
+    candles?: CandleData[];
     candles_analysis: string;
     order_book_analysis: string;
     trade_history_analysis: string;
