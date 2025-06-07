@@ -20,7 +20,7 @@ Create a modern frontend-only crypto analysis dashboard using **React + TypeScri
   - Order Book Analysis
   - Trade History Analysis
   - Suggested Trading Recipe
-- Show `risk_level`, `buy_or_sell`, `expected_profit`, `suggested_price_per_unit` in a highlighted box
+- Show `risk_level`, `buy_or_not`, `expected_profit`, `suggested_price_per_unit` in a highlighted box
 - Display error messages gracefully if fetch fails
 - Responsive UI with a modern design
 
@@ -97,7 +97,7 @@ fetch("http://127.0.0.1:5000/analyze", requestOptions)
     },
     "pair": "'I-USDT_INR'",
     "recipes": {
-        "buy_or_sell": "Neutral",
+        "buy_or_not": "Neutral",
         "expected_profit": 0.0,
         "pair_name": "I-USDT_INR",
         "quantity": 0.0,

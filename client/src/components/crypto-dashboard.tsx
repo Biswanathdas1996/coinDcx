@@ -1,52 +1,70 @@
-import { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, TrendingUp, Shield, Percent, Tag, Lightbulb, BarChart3, Layers, History, TriangleAlert, Search, Coins } from 'lucide-react';
-import CandlestickChart from '@/components/candlestick-chart';
-import type { CryptoAnalysisResponse, CryptoAnalysisRequest } from '@/types/crypto';
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  Loader2,
+  TrendingUp,
+  Shield,
+  Percent,
+  Tag,
+  Lightbulb,
+  BarChart3,
+  Layers,
+  History,
+  TriangleAlert,
+  Search,
+  Coins,
+} from "lucide-react";
+import CandlestickChart from "@/components/candlestick-chart";
+import type {
+  CryptoAnalysisResponse,
+  CryptoAnalysisRequest,
+} from "@/types/crypto";
 
 export default function CryptoDashboard() {
-  const [pair, setPair] = useState('');
+  const [pair, setPair] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [results, setResults] = useState<CryptoAnalysisResponse | null>(null);
 
   const getRiskLevelColor = (riskLevel: string) => {
     const level = riskLevel.toLowerCase();
-    if (level.includes('low')) return 'text-green-400';
-    if (level.includes('medium') || level.includes('moderate')) return 'text-yellow-400';
-    if (level.includes('high') || level.includes('extreme')) return 'text-red-400';
-    return 'text-slate-400';
+    if (level.includes("low")) return "text-green-400";
+    if (level.includes("medium") || level.includes("moderate"))
+      return "text-yellow-400";
+    if (level.includes("high") || level.includes("extreme"))
+      return "text-red-400";
+    return "text-slate-400";
   };
 
   const getBuySellColor = (signal: string) => {
-    const sig = signal.toLowerCase();
-    if (sig.includes('buy')) return 'text-green-400';
-    if (sig.includes('sell')) return 'text-red-400';
-    return 'text-slate-400';
+    const sig = signal?.toLowerCase();
+    if (sig?.includes("buy")) return "text-green-400";
+    if (sig?.includes("sell")) return "text-red-400";
+    return "text-slate-400";
   };
 
   const formatPrice = (price: number) => {
-    if (price === 0) return '₹0.00';
+    if (price === 0) return "₹0.00";
     return `₹${price.toFixed(2)}`;
   };
 
   const formatProfit = (profit: number) => {
-    if (profit === 0) return '0.0%';
-    return `${profit > 0 ? '+' : ''}${profit.toFixed(2)}%`;
+    if (profit === 0) return "0.0%";
+    return `${profit > 0 ? "+" : ""}${profit.toFixed(2)}%`;
   };
 
   const truncateText = (text: string, maxLength: number = 500) => {
     if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength) + '...';
+    return text.substring(0, maxLength) + "...";
   };
 
   const handleAnalyze = async () => {
     if (!pair.trim()) {
-      setError('Please enter a crypto trading pair (e.g., I-USDT_INR)');
+      setError("Please enter a crypto trading pair (e.g., I-USDT_INR)");
       return;
     }
 
@@ -56,11 +74,11 @@ export default function CryptoDashboard() {
 
     try {
       const requestData: CryptoAnalysisRequest = { pair: pair.trim() };
-      
-      const response = await fetch('http://127.0.0.1:5000/analyze', {
-        method: 'POST',
+
+      const response = await fetch("http://127.0.0.1:5001/analyze", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(requestData),
       });
@@ -72,19 +90,20 @@ export default function CryptoDashboard() {
       const data: CryptoAnalysisResponse = await response.json();
       setResults(data);
     } catch (err) {
-      console.error('Analysis error:', err);
-      
-      let errorMsg = 'Failed to analyze the trading pair. ';
+      console.error("Analysis error:", err);
+
+      let errorMsg = "Failed to analyze the trading pair. ";
       if (err instanceof Error) {
-        if (err.message.includes('Failed to fetch')) {
-          errorMsg += 'Please ensure the Flask server is running on localhost:5000.';
+        if (err.message.includes("Failed to fetch")) {
+          errorMsg +=
+            "Please ensure the Flask server is running on localhost:5000.";
         } else {
           errorMsg += err.message;
         }
       } else {
-        errorMsg += 'An unknown error occurred.';
+        errorMsg += "An unknown error occurred.";
       }
-      
+
       setError(errorMsg);
     } finally {
       setIsLoading(false);
@@ -92,7 +111,7 @@ export default function CryptoDashboard() {
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !isLoading) {
+    if (e.key === "Enter" && !isLoading) {
       handleAnalyze();
     }
   };
@@ -126,7 +145,10 @@ export default function CryptoDashboard() {
             <CardContent className="p-6">
               <div className="flex flex-col sm:flex-row gap-4">
                 <div className="flex-1">
-                  <Label htmlFor="cryptoPair" className="block text-sm font-medium text-slate-300 mb-2">
+                  <Label
+                    htmlFor="cryptoPair"
+                    className="block text-sm font-medium text-slate-300 mb-2"
+                  >
                     <Coins className="inline w-4 h-4 text-blue-400 mr-2" />
                     Crypto Trading Pair
                   </Label>
@@ -173,11 +195,18 @@ export default function CryptoDashboard() {
                 <div className="flex flex-col items-center space-y-4">
                   <div className="relative">
                     <div className="w-12 h-12 border-4 border-slate-600 border-t-blue-500 rounded-full animate-spin"></div>
-                    <div className="absolute inset-0 w-12 h-12 border-4 border-transparent border-r-purple-500 rounded-full animate-spin" style={{ animationDelay: '-0.5s' }}></div>
+                    <div
+                      className="absolute inset-0 w-12 h-12 border-4 border-transparent border-r-purple-500 rounded-full animate-spin"
+                      style={{ animationDelay: "-0.5s" }}
+                    ></div>
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-slate-200 mb-1">Analyzing Market Data</h3>
-                    <p className="text-slate-400">Processing candles, order book, and trade history...</p>
+                    <h3 className="text-lg font-semibold text-slate-200 mb-1">
+                      Analyzing Market Data
+                    </h3>
+                    <p className="text-slate-400">
+                      Processing candles, order book, and trade history...
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -191,7 +220,9 @@ export default function CryptoDashboard() {
             <Alert className="bg-red-900/20 border-red-500/30">
               <TriangleAlert className="h-4 w-4 text-red-400" />
               <AlertDescription className="text-red-300">
-                <strong className="text-red-400 font-medium">Analysis Failed</strong>
+                <strong className="text-red-400 font-medium">
+                  Analysis Failed
+                </strong>
                 <br />
                 {error}
               </AlertDescription>
@@ -203,14 +234,15 @@ export default function CryptoDashboard() {
         {results && (
           <div className="animate-fade-in">
             {/* Candlestick Chart */}
-            {results.analysis.candles && results.analysis.candles.length > 0 && (
-              <div className="mb-8">
-                <CandlestickChart 
-                  data={results.analysis.candles} 
-                  pair={results.pair}
-                />
-              </div>
-            )}
+            {results.analysis.candles &&
+              results.analysis.candles.length > 0 && (
+                <div className="mb-8">
+                  <CandlestickChart
+                    data={results.analysis.candles}
+                    pair={results.pair}
+                  />
+                </div>
+              )}
 
             {/* Trading Recipe Highlight */}
             <div className="mb-8">
@@ -218,17 +250,23 @@ export default function CryptoDashboard() {
                 <TrendingUp className="text-blue-400 mr-3 w-6 h-6" />
                 Trading Recommendation
               </h2>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 {/* Buy/Sell Signal */}
                 <Card className="bg-gradient-to-br from-slate-800 to-slate-700 border-slate-600">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-slate-400 text-sm font-medium">Signal</span>
+                      <span className="text-slate-400 text-sm font-medium">
+                        Signal
+                      </span>
                       <TrendingUp className="w-4 h-4 text-slate-500" />
                     </div>
-                    <div className={`text-2xl font-bold ${getBuySellColor(results.recipes.buy_or_sell)}`}>
-                      {results.recipes.buy_or_sell}
+                    <div
+                      className={`text-2xl font-bold ${getBuySellColor(
+                        results.recipes.buy_or_not
+                      )}`}
+                    >
+                      {results.recipes.buy_or_not}
                     </div>
                   </CardContent>
                 </Card>
@@ -237,10 +275,16 @@ export default function CryptoDashboard() {
                 <Card className="bg-gradient-to-br from-slate-800 to-slate-700 border-slate-600">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-slate-400 text-sm font-medium">Risk Level</span>
+                      <span className="text-slate-400 text-sm font-medium">
+                        Risk Level
+                      </span>
                       <Shield className="w-4 h-4 text-slate-500" />
                     </div>
-                    <div className={`text-2xl font-bold ${getRiskLevelColor(results.recipes.risk_level)}`}>
+                    <div
+                      className={`text-2xl font-bold ${getRiskLevelColor(
+                        results.recipes.risk_level
+                      )}`}
+                    >
                       {results.recipes.risk_level}
                     </div>
                   </CardContent>
@@ -250,7 +294,9 @@ export default function CryptoDashboard() {
                 <Card className="bg-gradient-to-br from-slate-800 to-slate-700 border-slate-600">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-slate-400 text-sm font-medium">Expected Profit</span>
+                      <span className="text-slate-400 text-sm font-medium">
+                        Expected Profit
+                      </span>
                       <Percent className="w-4 h-4 text-slate-500" />
                     </div>
                     <div className="text-2xl font-bold text-green-400">
@@ -263,7 +309,9 @@ export default function CryptoDashboard() {
                 <Card className="bg-gradient-to-br from-slate-800 to-slate-700 border-slate-600">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-slate-400 text-sm font-medium">Suggested Price</span>
+                      <span className="text-slate-400 text-sm font-medium">
+                        Suggested Price
+                      </span>
                       <Tag className="w-4 h-4 text-slate-500" />
                     </div>
                     <div className="text-2xl font-bold text-blue-400">
@@ -293,7 +341,7 @@ export default function CryptoDashboard() {
                 <BarChart3 className="text-purple-400 mr-3 w-6 h-6" />
                 Detailed Analysis
               </h2>
-              
+
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Candles Analysis */}
                 <Card className="bg-slate-800 border-slate-700 overflow-hidden">

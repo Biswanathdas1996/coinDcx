@@ -808,7 +808,7 @@
     },
     "pair": "I-USDT_INR",
     "recipes": {
-        "buy_or_sell": "Buy",
+        "buy_or_not": "Buy",
         "expected_profit": 0.11,
         "pair_name": "I-USDT_INR",
         "quantity": 100,

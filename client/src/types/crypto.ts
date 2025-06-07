@@ -16,7 +16,7 @@ export interface CryptoAnalysisResponse {
   };
   pair: string;
   recipes: {
-    buy_or_sell: string;
+    buy_or_not: string;
     expected_profit: number;
     pair_name: string;
     quantity: number;
