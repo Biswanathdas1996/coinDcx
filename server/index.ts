@@ -8,23 +8,24 @@ import { CryptoAnalysisService } from './crypto-service.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-async function createViteServer() {
-  const vite = await createServer({
-    server: { middlewareMode: true },
-    appType: 'spa',
-    root: join(__dirname, '../client'),
-    configFile: join(__dirname, '../vite.config.ts'),
-    optimizeDeps: {
-      force: true
-    }
-  });
-
+async function startServer() {
   const app = express();
   const cryptoService = new CryptoAnalysisService();
 
   // Enable CORS and JSON parsing
-  app.use(cors());
+  app.use(cors({
+    origin: true,
+    credentials: true
+  }));
   app.use(express.json());
+
+  // Create Vite server in middleware mode
+  const vite = await createServer({
+    server: { middlewareMode: true },
+    appType: 'spa',
+    root: join(__dirname, '../client'),
+    configFile: join(__dirname, '../vite.config.ts')
+  });
 
   // API routes before Vite middleware
   app.post('/analyze', async (req, res) => {
@@ -72,7 +73,7 @@ async function createViteServer() {
     res.json({ status: 'ok', message: 'Crypto Analysis Server is running' });
   });
 
-  // Use vite's connect instance as middleware for everything else
+  // Serve static assets and handle client routing
   app.use(vite.ssrFixStacktrace);
   app.use(vite.middlewares);
 
@@ -85,4 +86,4 @@ async function createViteServer() {
   });
 }
 
-createViteServer().catch(console.error);
+startServer().catch(console.error);
