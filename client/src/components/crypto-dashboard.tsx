@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { Card, CardContent } from './ui/card';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { Alert, AlertDescription } from './ui/alert';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, TrendingUp, Shield, Percent, Tag, Lightbulb, BarChart3, Layers, History, TriangleAlert, Search, Coins } from 'lucide-react';
-import type { CryptoAnalysisResponse, CryptoAnalysisRequest } from '../types/crypto';
+import type { CryptoAnalysisResponse, CryptoAnalysisRequest } from '@/types/crypto';
 
 export default function CryptoDashboard() {
   const [pair, setPair] = useState('');
