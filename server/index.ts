@@ -13,10 +13,14 @@ async function createViteServer() {
     server: { middlewareMode: true },
     appType: 'spa',
     root: join(__dirname, '../client'),
-    configFile: join(__dirname, '../vite.config.ts')
+    configFile: join(__dirname, '../vite.config.ts'),
+    optimizeDeps: {
+      force: true
+    }
   });
 
   const app = express();
+  const cryptoService = new CryptoAnalysisService();
 
   // Enable CORS and JSON parsing
   app.use(cors());
@@ -31,25 +35,41 @@ async function createViteServer() {
         return res.status(400).json({ error: 'Trading pair is required' });
       }
 
-      // Check if we have a crypto analysis API key
-      const apiKey = process.env.CRYPTO_API_KEY || process.env.OPENAI_API_KEY;
+      console.log(`Analyzing crypto pair: ${pair}`);
       
-      if (!apiKey) {
-        return res.status(503).json({ 
-          error: 'Crypto analysis service not configured. Please provide API credentials in environment variables.' 
-        });
-      }
-
-      // Return error indicating the service needs proper configuration
-      res.status(503).json({
-        error: 'Crypto analysis service requires external API integration. Please configure the appropriate API keys and endpoints.',
-        details: 'This endpoint needs to be connected to a real crypto data provider such as CoinGecko, Binance API, or a custom trading analysis service.'
-      });
+      // Use the crypto analysis service to get real market data
+      const analysis = await cryptoService.analyzeMarket(pair);
+      
+      console.log(`Analysis completed for ${pair}`);
+      res.json(analysis);
 
     } catch (error) {
       console.error('Analysis error:', error);
-      res.status(500).json({ error: 'Internal server error' });
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      const pairName = req.body.pair || 'unknown';
+      
+      if (errorMessage.includes('not found')) {
+        res.status(404).json({ 
+          error: `Trading pair "${pairName}" not found. Please check the symbol and try again.`,
+          suggestion: 'Try using common pairs like BTC-USD, ETH-USD, or ADA-USD'
+        });
+      } else if (errorMessage.includes('fetch')) {
+        res.status(503).json({ 
+          error: 'Unable to fetch market data. The crypto data service may be temporarily unavailable.',
+          details: errorMessage
+        });
+      } else {
+        res.status(500).json({ 
+          error: 'Analysis failed due to an internal error.',
+          details: errorMessage
+        });
+      }
     }
+  });
+
+  // Health check endpoint
+  app.get('/health', (req, res) => {
+    res.json({ status: 'ok', message: 'Crypto Analysis Server is running' });
   });
 
   // Use vite's connect instance as middleware for everything else
@@ -61,6 +81,7 @@ async function createViteServer() {
   app.listen(port, '0.0.0.0', () => {
     console.log(`🚀 Server running on http://0.0.0.0:${port}`);
     console.log(`📊 API available at http://0.0.0.0:${port}/analyze`);
+    console.log(`💡 Ready to analyze crypto trading pairs with real market data`);
   });
 }
 
