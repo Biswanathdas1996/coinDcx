@@ -49,40 +49,40 @@ export default function OrdersPage() {
   const getStatusBadge = (status: string) => {
     switch (status.toLowerCase()) {
       case 'open':
-        return <Badge variant="secondary" className="bg-blue-100 text-blue-800 border-blue-200">
+        return <Badge variant="secondary" className="bg-blue-900/30 text-blue-300 border-blue-600/50">
           <Clock className="w-3 h-3 mr-1" />
           Open
         </Badge>;
       case 'closed':
-        return <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">
+        return <Badge variant="secondary" className="bg-green-900/30 text-green-300 border-green-600/50">
           <CheckCircle className="w-3 h-3 mr-1" />
           Closed
         </Badge>;
       case 'cancelled':
-        return <Badge variant="secondary" className="bg-red-100 text-red-800 border-red-200">
+        return <Badge variant="secondary" className="bg-red-900/30 text-red-300 border-red-600/50">
           <XCircle className="w-3 h-3 mr-1" />
           Cancelled
         </Badge>;
       case 'partially_filled':
-        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 border-yellow-200">
+        return <Badge variant="secondary" className="bg-yellow-900/30 text-yellow-300 border-yellow-600/50">
           <AlertTriangle className="w-3 h-3 mr-1" />
           Partial
         </Badge>;
       default:
-        return <Badge variant="outline">{status}</Badge>;
+        return <Badge variant="outline" className="border-slate-600 text-slate-300">{status}</Badge>;
     }
   };
 
   const getSideIcon = (side: string) => {
     return side.toLowerCase() === 'buy' ? (
-      <ArrowUpRight className="w-4 h-4 text-green-600" />
+      <ArrowUpRight className="w-4 h-4 text-green-400" />
     ) : (
-      <ArrowDownRight className="w-4 h-4 text-red-600" />
+      <ArrowDownRight className="w-4 h-4 text-red-400" />
     );
   };
 
   const getSideColor = (side: string) => {
-    return side.toLowerCase() === 'buy' ? 'text-green-600' : 'text-red-600';
+    return side.toLowerCase() === 'buy' ? 'text-green-400' : 'text-red-400';
   };
 
   const formatCurrency = (amount: number, symbol: string = '₹') => {
