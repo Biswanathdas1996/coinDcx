@@ -96,60 +96,80 @@ export default function OrdersPage() {
   const orders = data?.orders?.orders || [];
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
-          <div>
-            <div className="flex items-center mb-2">
-              <Link href="/">
-                <Button variant="ghost" size="sm" className="mr-2">
-                  <ArrowLeft className="w-4 h-4 mr-1" />
-                  Dashboard
-                </Button>
-              </Link>
-              <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 flex items-center">
-                <ShoppingCart className="mr-3 w-8 h-8 text-blue-600" />
-                Orders
+    <div className="min-h-screen bg-slate-900 text-slate-50">
+      {/* Header */}
+      <header className="border-b border-slate-700 bg-slate-800/50 backdrop-blur-sm sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <ShoppingCart className="text-white w-4 h-4" />
+              </div>
+              <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                Orders Dashboard
               </h1>
             </div>
-            <p className="text-slate-600 dark:text-slate-400">
-              Track your trading orders and their status
-            </p>
+            <div className="flex items-center space-x-4">
+              <Link href="/">
+                <Button variant="outline" size="sm" className="flex items-center space-x-2 bg-slate-700 border-slate-600 text-slate-50 hover:bg-slate-600">
+                  <BarChart3 className="w-4 h-4" />
+                  <span>Analysis</span>
+                </Button>
+              </Link>
+              <Button 
+                onClick={handleRefresh}
+                disabled={isLoading}
+                variant="outline"
+                size="sm"
+                className="bg-slate-700 border-slate-600 text-slate-50 hover:bg-slate-600"
+              >
+                <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+                Refresh
+              </Button>
+              <div className="flex items-center space-x-2 text-sm text-slate-400">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span>Live Data</span>
+              </div>
+            </div>
           </div>
-          <Button 
-            onClick={handleRefresh}
-            disabled={isLoading}
-            className="mt-4 sm:mt-0"
-            variant="outline"
-          >
-            <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
-            Refresh
-          </Button>
         </div>
+      </header>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
 
         {/* Error Alert */}
         {error && (
-          <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-500/30">
-            <AlertTriangle className="h-4 w-4 text-red-600 dark:text-red-400" />
-            <AlertDescription className="text-red-800 dark:text-red-300">
-              <strong>Error loading orders:</strong>
-              <br />
-              {error instanceof Error ? error.message : 'Failed to fetch orders'}
-            </AlertDescription>
-          </Alert>
+          <div className="animate-fade-in mb-6">
+            <Alert className="bg-red-900/20 border-red-500/30">
+              <AlertTriangle className="h-4 w-4 text-red-400" />
+              <AlertDescription className="text-red-300">
+                <strong className="text-red-400 font-medium">Failed to Load Orders</strong>
+                <br />
+                {error instanceof Error ? error.message : 'Failed to fetch orders'}
+              </AlertDescription>
+            </Alert>
+          </div>
         )}
 
         {/* Loading State */}
         {isLoading && !data && (
-          <Card>
-            <CardContent className="p-8 text-center">
-              <div className="flex flex-col items-center space-y-4">
-                <div className="w-8 h-8 border-4 border-slate-300 border-t-blue-600 rounded-full animate-spin"></div>
-                <p className="text-slate-600 dark:text-slate-400">Loading orders...</p>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="animate-fade-in mb-8">
+            <Card className="bg-slate-800 border-slate-700">
+              <CardContent className="p-8 text-center">
+                <div className="flex flex-col items-center space-y-4">
+                  <div className="relative">
+                    <div className="w-12 h-12 border-4 border-slate-600 border-t-blue-500 rounded-full animate-spin"></div>
+                    <div className="absolute inset-0 w-12 h-12 border-4 border-transparent border-r-purple-500 rounded-full animate-spin" style={{ animationDelay: '-0.5s' }}></div>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-slate-200 mb-1">Loading Orders</h3>
+                    <p className="text-slate-400">Fetching your trading orders...</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         )}
 
         {/* Orders List */}
@@ -157,58 +177,58 @@ export default function OrdersPage() {
           <>
             {/* Summary Stats */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-              <Card>
+              <Card className="bg-gradient-to-br from-slate-800 to-slate-700 border-slate-600">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-slate-600 dark:text-slate-400">Total Orders</p>
-                      <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+                      <p className="text-sm text-slate-400">Total Orders</p>
+                      <p className="text-2xl font-bold text-slate-100">
                         {orders.length}
                       </p>
                     </div>
-                    <ShoppingCart className="w-8 h-8 text-slate-400" />
+                    <ShoppingCart className="w-8 h-8 text-slate-500" />
                   </div>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="bg-gradient-to-br from-slate-800 to-slate-700 border-slate-600">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-slate-600 dark:text-slate-400">Open Orders</p>
-                      <p className="text-2xl font-bold text-blue-600">
+                      <p className="text-sm text-slate-400">Open Orders</p>
+                      <p className="text-2xl font-bold text-blue-400">
                         {orders.filter(order => order.status === 'open').length}
                       </p>
                     </div>
-                    <Clock className="w-8 h-8 text-blue-400" />
+                    <Clock className="w-8 h-8 text-blue-500" />
                   </div>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="bg-gradient-to-br from-slate-800 to-slate-700 border-slate-600">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-slate-600 dark:text-slate-400">Buy Orders</p>
-                      <p className="text-2xl font-bold text-green-600">
+                      <p className="text-sm text-slate-400">Buy Orders</p>
+                      <p className="text-2xl font-bold text-green-400">
                         {orders.filter(order => order.side === 'buy').length}
                       </p>
                     </div>
-                    <TrendingUp className="w-8 h-8 text-green-400" />
+                    <TrendingUp className="w-8 h-8 text-green-500" />
                   </div>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="bg-gradient-to-br from-slate-800 to-slate-700 border-slate-600">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-slate-600 dark:text-slate-400">Sell Orders</p>
-                      <p className="text-2xl font-bold text-red-600">
+                      <p className="text-sm text-slate-400">Sell Orders</p>
+                      <p className="text-2xl font-bold text-red-400">
                         {orders.filter(order => order.side === 'sell').length}
                       </p>
                     </div>
-                    <TrendingDown className="w-8 h-8 text-red-400" />
+                    <TrendingDown className="w-8 h-8 text-red-500" />
                   </div>
                 </CardContent>
               </Card>
@@ -216,13 +236,13 @@ export default function OrdersPage() {
 
             {/* Orders Table */}
             {orders.length === 0 ? (
-              <Card>
+              <Card className="bg-slate-800 border-slate-700">
                 <CardContent className="p-8 text-center">
-                  <ShoppingCart className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2">
+                  <ShoppingCart className="w-16 h-16 text-slate-600 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-slate-200 mb-2">
                     No orders found
                   </h3>
-                  <p className="text-slate-600 dark:text-slate-400">
+                  <p className="text-slate-400">
                     You don't have any orders yet. Start trading to see your orders here.
                   </p>
                 </CardContent>
@@ -230,7 +250,7 @@ export default function OrdersPage() {
             ) : (
               <div className="space-y-4">
                 {orders.map((order: Order) => (
-                  <Card key={order.id} className="hover:shadow-md transition-shadow">
+                  <Card key={order.id} className="bg-slate-800 border-slate-700 hover:bg-slate-700/50 transition-all duration-200">
                     <CardContent className="p-6">
                       <div className="grid grid-cols-1 lg:grid-cols-6 gap-4">
                         {/* Order Info */}
@@ -240,26 +260,26 @@ export default function OrdersPage() {
                             <span className={`font-semibold ${getSideColor(order.side)} capitalize`}>
                               {order.side}
                             </span>
-                            <span className="font-mono text-sm bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">
+                            <span className="font-mono text-sm bg-slate-700 px-2 py-1 rounded">
                               {order.market}
                             </span>
                           </div>
-                          <p className="text-sm text-slate-600 dark:text-slate-400">
+                          <p className="text-sm text-slate-400">
                             {order.order_type.replace('_', ' ')}
                           </p>
-                          <p className="text-xs text-slate-500 dark:text-slate-500 mt-1">
+                          <p className="text-xs text-slate-500 mt-1">
                             ID: {order.id.slice(0, 8)}...
                           </p>
                         </div>
 
                         {/* Quantities */}
                         <div>
-                          <p className="text-sm text-slate-600 dark:text-slate-400">Quantity</p>
-                          <p className="font-semibold text-slate-900 dark:text-slate-100">
+                          <p className="text-sm text-slate-400">Quantity</p>
+                          <p className="font-semibold text-slate-100">
                             {order.total_quantity}
                           </p>
                           {order.remaining_quantity !== order.total_quantity && (
-                            <p className="text-xs text-orange-600">
+                            <p className="text-xs text-orange-400">
                               {order.remaining_quantity} remaining
                             </p>
                           )}
@@ -267,8 +287,8 @@ export default function OrdersPage() {
 
                         {/* Price */}
                         <div>
-                          <p className="text-sm text-slate-600 dark:text-slate-400">Price</p>
-                          <p className="font-semibold text-slate-900 dark:text-slate-100">
+                          <p className="text-sm text-slate-400">Price</p>
+                          <p className="font-semibold text-slate-100">
                             {formatCurrency(order.price_per_unit)}
                           </p>
                           {order.avg_price > 0 && (
@@ -280,14 +300,14 @@ export default function OrdersPage() {
 
                         {/* Status */}
                         <div>
-                          <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">Status</p>
+                          <p className="text-sm text-slate-400 mb-1">Status</p>
                           {getStatusBadge(order.status)}
                         </div>
 
                         {/* Dates */}
                         <div>
-                          <p className="text-sm text-slate-600 dark:text-slate-400">Created</p>
-                          <p className="text-sm font-mono text-slate-900 dark:text-slate-100">
+                          <p className="text-sm text-slate-400">Created</p>
+                          <p className="text-sm font-mono text-slate-100">
                             {formatDate(order.created_at)}
                           </p>
                           {order.updated_at !== order.created_at && (
@@ -300,25 +320,25 @@ export default function OrdersPage() {
 
                       {/* Additional Details */}
                       {(order.fee > 0 || order.market_order_locked > 0) && (
-                        <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
+                        <div className="mt-4 pt-4 border-t border-slate-700">
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                             {order.fee > 0 && (
                               <div>
-                                <span className="text-slate-600 dark:text-slate-400">Fee: </span>
-                                <span className="font-semibold">{order.fee}%</span>
+                                <span className="text-slate-400">Fee: </span>
+                                <span className="font-semibold text-slate-200">{order.fee}%</span>
                               </div>
                             )}
                             {order.market_order_locked > 0 && (
                               <div>
-                                <span className="text-slate-600 dark:text-slate-400">Locked: </span>
-                                <span className="font-semibold">
+                                <span className="text-slate-400">Locked: </span>
+                                <span className="font-semibold text-slate-200">
                                   {formatCurrency(order.market_order_locked)}
                                 </span>
                               </div>
                             )}
                             <div>
-                              <span className="text-slate-600 dark:text-slate-400">Source: </span>
-                              <span className="font-semibold capitalize">
+                              <span className="text-slate-400">Source: </span>
+                              <span className="font-semibold text-slate-200 capitalize">
                                 {order.source.replace('_', ' ')}
                               </span>
                             </div>
