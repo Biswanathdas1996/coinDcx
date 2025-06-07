@@ -31,6 +31,7 @@ export default function CryptoDashboard() {
   const [results, setResults] = useState<CryptoAnalysisResponse | null>(null);
 
   const getRiskLevelColor = (riskLevel: string) => {
+    if (!riskLevel) return 'text-slate-400';
     const level = riskLevel.toLowerCase();
     if (level.includes("low")) return "text-green-400";
     if (level.includes("medium") || level.includes("moderate"))
