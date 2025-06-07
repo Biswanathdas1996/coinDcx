@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "wouter";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,6 +18,7 @@ import {
   TriangleAlert,
   Search,
   Coins,
+  ShoppingCart,
 } from "lucide-react";
 import CandlestickChart from "@/components/candlestick-chart";
 import type {
@@ -131,9 +133,17 @@ export default function CryptoDashboard() {
                 Crypto Analysis Dashboard
               </h1>
             </div>
-            <div className="flex items-center space-x-2 text-sm text-slate-400">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span>Live Data</span>
+            <div className="flex items-center space-x-4">
+              <Link href="/orders">
+                <Button variant="outline" size="sm" className="flex items-center space-x-2">
+                  <ShoppingCart className="w-4 h-4" />
+                  <span>Orders</span>
+                </Button>
+              </Link>
+              <div className="flex items-center space-x-2 text-sm text-slate-400">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span>Live Data</span>
+              </div>
             </div>
           </div>
         </div>

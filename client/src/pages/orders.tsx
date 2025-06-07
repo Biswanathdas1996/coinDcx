@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { Link } from 'wouter';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -14,7 +15,9 @@ import {
   XCircle, 
   AlertTriangle,
   ArrowUpRight,
-  ArrowDownRight
+  ArrowDownRight,
+  ArrowLeft,
+  BarChart3
 } from 'lucide-react';
 import { format } from 'date-fns';
 import type { OrdersResponse, Order } from '@/types/orders';
@@ -98,11 +101,19 @@ export default function OrdersPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 flex items-center">
-              <ShoppingCart className="mr-3 w-8 h-8 text-blue-600" />
-              Orders
-            </h1>
-            <p className="text-slate-600 dark:text-slate-400 mt-2">
+            <div className="flex items-center mb-2">
+              <Link href="/">
+                <Button variant="ghost" size="sm" className="mr-2">
+                  <ArrowLeft className="w-4 h-4 mr-1" />
+                  Dashboard
+                </Button>
+              </Link>
+              <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 flex items-center">
+                <ShoppingCart className="mr-3 w-8 h-8 text-blue-600" />
+                Orders
+              </h1>
+            </div>
+            <p className="text-slate-600 dark:text-slate-400">
               Track your trading orders and their status
             </p>
           </div>
