@@ -1,0 +1,111 @@
+Crypto coins data analizer application
+
+
+Here’s a **Replit prompt** that will create a modern, frontend-only **TypeScript-based UI** app using **React + Vite + Tailwind CSS** to display crypto analysis by consuming your existing local API (`http://127.0.0.1:5000/analyze`). It allows users to input trading pairs and shows a clear, organized analysis result in a modern design — **no backend included**.
+
+---
+
+### ✅ Replit Prompt (copy-paste this in Replit)
+
+> **Prompt to Replit:**
+
+```
+Create a modern frontend-only crypto analysis dashboard using **React + TypeScript + Tailwind CSS**. No backend should be included.
+
+**Features to include:**
+- Input field to enter crypto pair (e.g., I-USDT_INR)
+- Button to trigger API request to `http://127.0.0.1:5000/analyze`
+- Display analysis data returned from API in clean, card-based sections:
+  - Candles Analysis
+  - Order Book Analysis
+  - Trade History Analysis
+  - Suggested Trading Recipe
+- Show `risk_level`, `buy_or_sell`, `expected_profit`, `suggested_price_per_unit` in a highlighted box
+- Display error messages gracefully if fetch fails
+- Responsive UI with a modern design
+
+**Constraints:**
+- Use only TypeScript (no JavaScript files)
+- Use only React + Tailwind CSS + Fetch API
+- Do not include a backend/server
+- Structure the project using `vite` template
+
+The UI should look clean and professional with Tailwind's card-style layout, using consistent spacing, colors, and responsiveness.
+```
+
+---
+
+### 🧠 How It Works
+
+* **Frontend-only**: It fetches from your Flask server at `localhost:5000`.
+* **Custom Pair Input**: The user can test with different crypto pairs.
+* **Tailwind UI**: Clean cards, responsive layout, and readable typography.
+* **TypeScript**: Ensures type safety and modern frontend stack.
+
+---
+
+### ✅ After Replit Generates the Template:
+
+You’ll likely see files like:
+
+```
+src/
+  App.tsx
+  main.tsx
+  components/
+    PairInput.tsx
+    ResultCard.tsx
+    ErrorAlert.tsx
+  types.ts
+```
+
+If you need I can generate and paste the full `App.tsx` and components code too.
+
+Would you like that?
+
+
+API Details use
+
+
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+
+var raw = JSON.stringify({
+  "pair": "'I-USDT_INR'"
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("http://127.0.0.1:5000/analyze", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+
+
+  Sample response :
+
+  {
+    "analysis": {
+        "candles_analysis": "Okay, I need the candle data for 'I-USDT_INR' at 1m to perform that analysis.  Please provide the list of candles (Open, High, Low, Close, Volume) for each minute.  Once you provide the data, I'll give you a concise summary of the analysis.\n",
+        "order_book_analysis": "*   **Best Bid/Ask:** No bids or asks available.\n*   **Spread:** Undefined (cannot calculate without bid/ask data).\n*   **Order Book Imbalance:** Cannot determine imbalance.\n*   **Liquidity Walls:** None present.\n*   **Spoofing/Layering:** Cannot detect.\n*   **Volume Clusters:** None.\n*   **Microstructure Trend:** Neutral, no trend detectable.\n*   **Momentum:** No momentum discernible.\n*   **Trend/Price Action Indication:** The order book is empty, indicating extremely low or no current trading activity. No meaningful analysis is possible.\n",
+        "trade_history_analysis": "**Given the empty trade history, I can't provide specific insights. Here's a general framework if data was available:**\n\n*   **📈 Price Action/Momentum:** Look for trends (uptrend, downtrend, sideways), volatility, and recent direction.\n*   **🔄 Buy/Sell Pressure:** Analyze volume associated with buys vs. sells to gauge dominant sentiment. Look for large orders influencing direction.\n*   **💡 Trade Signals:** Use patterns and pressure to identify potential buy (support, breakout) or sell (resistance, breakdown) opportunities.\n*   **🎯 Levels:** Entry near support/resistance, limit at next price target, stop-loss below support/above resistance.\n"
+    },
+    "pair": "'I-USDT_INR'",
+    "recipes": {
+        "buy_or_sell": "Neutral",
+        "expected_profit": 0.0,
+        "pair_name": "I-USDT_INR",
+        "quantity": 0.0,
+        "reasoning": "Due to the absence of order book and trade history data, no informed trading decision can be made. The order book is empty, and no recent trades are available, indicating illiquidity. Therefore, any trade suggestion would be purely speculative and high risk.",
+        "risk_level": "Extremely High",
+        "suggested_price_per_unit": 0.0,
+        "time_frame": "N/A"
+    }
+}
+
+
